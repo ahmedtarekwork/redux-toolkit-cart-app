@@ -1,0 +1,432 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+/* global sets for some html elements */
+ul {
+  list-style: none;
+}
+
+img {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+input {
+  &[type="file"] {
+    display: none;
+  }
+
+  transition: border-color 0.3s;
+  &.red {
+    border-color: red;
+  }
+
+  padding: 10px;
+  outline: none;
+  border: 1px solid blueviolet;
+  border-radius: 4px;
+  font-size: 14px;
+
+  &::placeholder {
+    transition: 0.3s;
+  }
+  &:focus::placeholder {
+    opacity: 0;
+  }
+}
+
+a,
+button,
+.btn {
+  &.full {
+    width: 100%;
+  }
+
+  &.fit {
+    width: fit-content;
+  }
+
+  &:not(.no-style) {
+    text-align: center;
+    cursor: pointer;
+    color: blueviolet;
+    background-color: #fff;
+    padding: 7px;
+    display: grid;
+    place-content: center;
+    border-radius: 4px;
+    transition: 0.2s;
+    border: blueviolet 1px solid;
+    user-select: none;
+
+    &:hover,
+    &.active {
+      background-color: rgb(226, 196, 253);
+    }
+  }
+}
+
+/* some helper classes */
+.center-content {
+  display: grid;
+  place-content: center;
+}
+
+.center {
+  margin-inline: auto;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* start work with dom elemnts */
+header {
+  &,
+  & nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  & nav {
+    gap: 10px;
+  }
+}
+
+.popup-number {
+  position: relative;
+}
+.popup-element {
+  position: absolute;
+  width: 15px;
+  aspect-ratio: 1;
+  background-color: #fff;
+  border-radius: 4px;
+  display: grid;
+  place-content: center;
+  box-shadow: 0 0 7px;
+  right: -6px;
+  bottom: 74%;
+  font-size: 14px;
+}
+
+.title-with-line {
+  position: relative;
+  width: fit-content;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 70%;
+    height: 1px;
+    background-color: blueviolet;
+    left: 50%;
+    translate: -50% 0;
+  }
+}
+
+.main-app-holder {
+  padding-inline: 20px;
+  padding-top: 20px;
+}
+
+header,
+footer {
+  background: blueviolet;
+  color: #fff;
+  padding-block: 10px;
+  padding-inline: 20px;
+}
+
+footer {
+  display: grid;
+  place-content: center;
+  font-size: 20px;
+}
+
+@media (max-width: 500px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+
+    & h1 {
+      font-size: 18px;
+    }
+  }
+  footer {
+    font-size: 15px;
+  }
+}
+
+/* home page */
+.home-page-top-section {
+  border: 1px solid blueviolet;
+  border-radius: 4px;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 25px;
+}
+.home-page-title {
+  margin: auto;
+  user-select: none;
+}
+
+.cats-tabs-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* dashboard */
+form {
+  & input {
+    width: 100%;
+  }
+
+  & > * + * {
+    margin-top: 10px;
+  }
+}
+
+.preview-holder {
+  margin-inline: auto;
+  margin-block: 15px;
+  height: 350px;
+  width: 100%;
+
+  & img {
+    margin: auto;
+  }
+}
+
+/* remove all productListPage items list btn */
+.remove-all-list-btn .content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 5px;
+}
+
+/* products list in home page */
+.vertical-list {
+  margin-block: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 0.85fr));
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* product card */
+.product-card,
+.horizontal-list > li:not(:first-child) {
+  & a.no-style {
+    color: #000;
+    font-weight: bold;
+  }
+
+  text-align: center;
+  border: blueviolet 1px solid;
+  border-radius: 4px;
+  padding: 10px;
+  transition: 0.25s;
+  background-color: rgba(226, 196, 253, 0.414);
+
+  &:hover {
+    background-color: rgb(226, 196, 253);
+  }
+}
+
+.product-card {
+  position: relative;
+  align-self: stretch;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & .img-holder {
+    flex: 1;
+    display: grid;
+    place-content: center;
+
+    & img {
+      width: 100%;
+      height: unset;
+    }
+  }
+}
+
+.add-product-to-favorites {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+
+  font-size: 17px;
+
+  &.active .fill {
+    opacity: 1;
+  }
+
+  & .fill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    transition: opacity 0.25s;
+    opacity: 0;
+  }
+}
+
+.product-card-btns-holder > * + * {
+  margin-top: 7px;
+}
+
+.horizontal-list {
+  margin-block: 15px;
+
+  .list-head {
+    text-align: center;
+  }
+
+  & > li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    & > *:not(.img-holder, .image-cell) {
+      flex: 1;
+    }
+
+    .img-holder {
+      width: 100px;
+    }
+  }
+
+  & > * + * {
+    margin-top: 10px;
+  }
+}
+
+.cart-item .delete-cart-item {
+  margin: auto;
+}
+
+.cart-item-qty {
+  width: 100%;
+}
+
+/* single product page */
+.product-data-holder {
+  display: flex;
+  gap: 10px;
+
+  & .img-holder {
+    width: 200px;
+
+    & img {
+      width: 350px;
+      margin: auto;
+    }
+  }
+
+  & .data-holder {
+    & > * + * {
+      margin-top: 10px;
+    }
+  }
+
+  & .category-cell {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+  }
+
+  & > * {
+    flex: 1;
+  }
+}
+
+.stars {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: fit-content;
+  margin-block: 15px;
+}
+
+.star {
+  & .the-star {
+    font-size: 40px;
+  }
+  & .star-grad {
+    position: absolute;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .product-data-holder {
+    flex-direction: column;
+    gap: 20px;
+
+    & .img-holder {
+      order: -1;
+      width: 70%;
+      margin: auto;
+    }
+  }
+}
+.single-product-btns-holder {
+  display: flex;
+  gap: 10px;
+
+  margin-block: 20px;
+
+  & > * {
+    flex: 1;
+  }
+}
+
+/* categories page */
+.categories {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+
+  & > * {
+    align-self: stretch;
+
+    & a {
+      height: 100%;
+    }
+  }
+}
+
+/* profile page */
+.profile-info-list li + * {
+  margin-top: 10px;
+}
