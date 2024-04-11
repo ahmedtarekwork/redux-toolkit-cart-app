@@ -1,10 +1,13 @@
+// redux
 import { useDispatch, useSelector } from "react-redux";
-import { RootStateType } from "../app/store";
 
-import { addToCart } from "../features/cartSlice";
-import { addToFavorites } from "../features/favoritesSlice";
-import { CartItemType } from "../types";
-import { productType } from "../features/productListSlice";
+// redux actions and thunks
+import { addToCart } from "../app/features/cartSlice";
+import { addToFavorites } from "../app/features/favoritesSlice";
+
+// types
+import { RootStateType } from "../app/store";
+import { CartItemType, productType } from "../types";
 
 const useGetProductData = (prdId: string | undefined | null) => {
   if (!prdId) throw new Error("id is required");
@@ -12,7 +15,7 @@ const useGetProductData = (prdId: string | undefined | null) => {
   const dispatch = useDispatch();
 
   const product = useSelector((state: RootStateType) =>
-    state.products.productsList.find((prd) => prd.id === prdId)
+    state.products.productsList.find((prd) => prd.id.toString() === prdId)
   );
 
   const isInCart = useSelector((state: RootStateType) =>

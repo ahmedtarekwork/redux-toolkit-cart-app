@@ -44,7 +44,13 @@ const SingleProduct = () => {
 
           <div className="description">
             <h3>Description</h3>
-            <p>{description}</p>
+            <p
+              style={{
+                marginTop: 10,
+              }}
+            >
+              {description}
+            </p>
           </div>
 
           <div className="rating">
@@ -60,7 +66,7 @@ const SingleProduct = () => {
                 return <Star percent={0} key={i} />;
               })}
             </div>
-            <p>useres who rated this: {ratersCount} user</p>
+            <p>number of useres who rated this: {ratersCount} user</p>
           </div>
         </div>
 

@@ -1,16 +1,24 @@
-import { ChangeEvent, MouseEvent, ReactNode } from "react";
+// react
+import { ChangeEvent, MouseEvent, ReactNode, useEffect, useRef } from "react";
+
+// react-router-dom
 import { Link } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+// hooks
 import useGetProductData from "../hooks/useGetProductData";
 
-import { editItemInCart, removeFromCart } from "../features/cartSlice";
-import { removeFromFavorites } from "../features/favoritesSlice";
+// redux
+import { useDispatch } from "react-redux";
 
-import { CartItemType } from "../types";
-import { productType } from "../features/productListSlice";
+// redux actions and thunks
+import { editItemInCart, removeFromCart } from "../app/features/cartSlice";
+import { removeFromFavorites } from "../app/features/favoritesSlice";
 
+// icons
 import { FaCheck, FaRegHeart, FaHeart, FaTrash } from "react-icons/fa";
+
+// types
+import { CartItemType, productType } from "../types";
 
 type Props =
   | {
@@ -20,6 +28,9 @@ type Props =
   | { itemType: "cartItem"; product: CartItemType };
 
 const ProductItem = (props: Props) => {
+  // refs
+  const deleteBtnRef = useRef<HTMLButtonElement>(null);
+
   const {
     itemType,
     product: { title, price, id, category, description, image, rating },
@@ -79,6 +90,7 @@ const ProductItem = (props: Props) => {
 
         <div className="delete-btn-holder">
           <button
+            ref={deleteBtnRef}
             className="delete-cart-item fit"
             onClick={
               itemType === "cartItem"
@@ -131,6 +143,32 @@ const ProductItem = (props: Props) => {
       </>
     );
   }
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      const btn = deleteBtnRef.current;
+
+      if (btn) {
+        const parent = btn.parentElement;
+
+        if (window.innerWidth <= 510) {
+          btn.classList.remove("fit");
+          btn.classList.add("full");
+          btn.style.paddingBlock = "10px";
+
+          parent?.style.setProperty("width", "100%");
+        } else {
+          btn.classList.add("fit");
+          btn.classList.remove("full");
+
+          parent?.style.removeProperty("width");
+        }
+      }
+    });
+    observer.observe(document.documentElement);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <li id={id} className={className}>

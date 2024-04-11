@@ -1,6 +1,5 @@
 import ProductItem from "./ProductItem";
-import { CartItemType } from "../types";
-import { productType } from "../features/productListSlice";
+import { productType, CartItemType } from "../types";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa6";
 

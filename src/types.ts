@@ -9,6 +9,7 @@ export type CartItemType = Record<
     count: number;
   };
 };
+export type productType = Omit<CartItemType, "qty">;
 
 export type InitStateType<T extends Record<string, unknown>> = T & {
   error: string;
@@ -27,12 +28,12 @@ export type User = {
     zipcode: `${number}-${number}`;
   };
   id: number;
-  email: `${string}@${string}.${string}`; //"john@gmail.com";
+  email: `${string}@${string}.${string}`;
   username: string;
   password: string;
   name: {
     firstname: string;
     lastname: string;
   };
-  phone: `${number}-${number}-${number}-${number}`; //"1-570-236-7033";
+  phone: `${number}-${number}-${number}-${number}`;
 };

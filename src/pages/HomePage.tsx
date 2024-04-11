@@ -1,9 +1,13 @@
+// redux
 import { useSelector } from "react-redux";
-import { RootStateType } from "../app/store";
 
+// components
 import Loading from "../components/Loading";
 import CategoriesTabs from "../components/CategoriesTabs";
 import ProductsList from "../components/ProductsList";
+
+// types
+import { RootStateType } from "../app/store";
 
 const HomePage = () => {
   const { productsList, loading, error } = useSelector(
@@ -20,10 +24,7 @@ const HomePage = () => {
           Hello In My Redux Cart App
         </h2>
 
-        <div className="cats-tabs-holder">
-          <h3>Take a look on our Categories</h3>
-          <CategoriesTabs />
-        </div>
+        <CategoriesTabs />
       </section>
 
       <h3 className="title-with-line">All products that we have:</h3>

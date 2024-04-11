@@ -1,10 +1,19 @@
+// react
 import { useEffect, useRef } from "react";
-import Header from "../components/Header";
-import { Outlet } from "react-router-dom";
+// react-router-dom
+import { Outlet, useLocation } from "react-router-dom";
+// redux
 import { useSelector } from "react-redux";
+
+// components
+import Header from "../components/Header";
+
+// types
 import { RootStateType } from "../app/store";
 
 const MainLayout = () => {
+  const { pathname } = useLocation();
+
   const headerRef = useRef<HTMLElement>(null);
   const mainElRef = useRef<HTMLElement>(null);
   const footerRef = useRef<HTMLElement>(null);
@@ -18,20 +27,33 @@ const MainLayout = () => {
   };
 
   useEffect(() => {
-    setHeightOfMainEl();
+    if (pathname === "/login" && mainElRef.current) {
+      mainElRef.current.classList.add("center-content");
+      mainElRef.current.style.cssText = `
+      padding-block: 20px;
+      min-height: 100vh`;
 
-    const watcher = new ResizeObserver(setHeightOfMainEl);
-    watcher.observe(document.documentElement);
+      return () => {
+        mainElRef.current?.classList.remove("center-content");
 
-    return () => {
-      watcher.unobserve(document.documentElement);
-    };
-  }, []);
+        ["padding-block", "min-height"].forEach((p) =>
+          mainElRef.current?.style.removeProperty(p)
+        );
+      };
+    } else {
+      setHeightOfMainEl();
+
+      const watcher = new ResizeObserver(setHeightOfMainEl);
+      watcher.observe(document.documentElement);
+
+      return () => watcher.unobserve(document.documentElement);
+    }
+  }, [pathname]);
 
   const user = useSelector((state: RootStateType) => state.users.currentUser);
 
   const main = (
-    <main className={"main-app-holder"} ref={mainElRef}>
+    <main className="container" ref={mainElRef}>
       <Outlet />
     </main>
   );
@@ -43,7 +65,12 @@ const MainLayout = () => {
       {main}
 
       <footer ref={footerRef}>
-        start work on 31/12/2023 <br /> finsh work on "don't know"
+        <div className="container">
+          made by{" "}
+          <a target="_blank" href="https://github.com/ahmedtarekwork">
+            ahmed tarek
+          </a>
+        </div>
       </footer>
     </>
   ) : (

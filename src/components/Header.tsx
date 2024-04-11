@@ -1,11 +1,20 @@
-import { Link } from "react-router-dom";
-import { FaCartShopping, FaHeart, FaUser } from "react-icons/fa6";
-import { MdSpaceDashboard } from "react-icons/md";
-import { ImExit } from "react-icons/im";
+// react
 import { useRef, forwardRef, LegacyRef } from "react";
+
+// react-router-dom
+import { Link } from "react-router-dom";
+
+// redux
 import { useSelector, useDispatch } from "react-redux";
+// redux actions
+import { logoutCurrentUser } from "../app/features/userSlice";
+
+// icons
+import { FaCartShopping, FaHeart, FaUser } from "react-icons/fa6";
+import { ImExit } from "react-icons/im";
+
+// types
 import { RootStateType } from "../app/store";
-import { logoutCurrentUser } from "../features/userSlice";
 
 const Header = (_: unknown, ref: unknown) => {
   const headerRef = useRef<HTMLElement>(null);
@@ -13,34 +22,34 @@ const Header = (_: unknown, ref: unknown) => {
 
   return (
     <header ref={(ref as LegacyRef<HTMLElement>) || headerRef}>
-      <Link to="/" className="no-style">
-        <h1>Redux Cart App</h1>
-      </Link>
-
-      <nav>
-        <button onClick={() => dispatch(logoutCurrentUser())}>
-          <ImExit />
-        </button>
-
-        <Link className="popup-number" to="/cart">
-          <div className="popup-element">
-            {useSelector((state: RootStateType) => state.cart.cartItemsLength)}
-          </div>
-          <FaCartShopping />
+      <div className="container">
+        <Link to="/" className="no-style">
+          <h1>Redux Cart App</h1>
         </Link>
 
-        <Link to="/favorites">
-          <FaHeart />
-        </Link>
+        <nav>
+          <button onClick={() => dispatch(logoutCurrentUser())}>
+            <ImExit />
+          </button>
 
-        <Link to="/dashboard">
-          <MdSpaceDashboard />
-        </Link>
+          <Link className="popup-number" to="/cart">
+            <div className="popup-element">
+              {useSelector(
+                (state: RootStateType) => state.cart.cartItemsLength
+              )}
+            </div>
+            <FaCartShopping />
+          </Link>
 
-        <Link to="/profile">
-          <FaUser />
-        </Link>
-      </nav>
+          <Link to="/favorites">
+            <FaHeart />
+          </Link>
+
+          <Link to="/profile">
+            <FaUser />
+          </Link>
+        </nav>
+      </div>
     </header>
   );
 };

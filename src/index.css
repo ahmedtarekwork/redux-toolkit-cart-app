@@ -6,6 +6,31 @@
 }
 
 /* global sets for some html elements */
+.container {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Small */
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+/* Medium */
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+/* Large */
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
 ul {
   list-style: none;
 }
@@ -19,6 +44,16 @@ img {
 a {
   text-decoration: none;
   color: #fff;
+}
+
+form {
+  & input {
+    width: 100%;
+  }
+
+  & > * + * {
+    margin-top: 10px;
+  }
 }
 
 input {
@@ -45,6 +80,15 @@ input {
   }
 }
 
+.err-msg {
+  transition: 0.3s;
+  color: red;
+  font-weight: bold;
+  letter-spacing: 0.2px;
+
+  opacity: 0;
+}
+
 a,
 button,
 .btn {
@@ -69,9 +113,16 @@ button,
     border: blueviolet 1px solid;
     user-select: none;
 
-    &:hover,
-    &.active {
+    &:is(&:hover, &.active):not(&[disabled]) {
       background-color: rgb(226, 196, 253);
+    }
+
+    &[disabled] {
+      color: gray;
+      cursor: not-allowed;
+      &:hover {
+        background-color: rgba(128, 128, 128, 0.212);
+      }
     }
   }
 }
@@ -94,7 +145,7 @@ button,
 
 /* start work with dom elemnts */
 header {
-  &,
+  & .container,
   & nav {
     display: flex;
     align-items: center;
@@ -141,29 +192,31 @@ header {
   }
 }
 
-.main-app-holder {
-  padding-inline: 20px;
-  padding-top: 20px;
+main {
+  padding-block: 20px;
 }
 
 header,
 footer {
   background: blueviolet;
   color: #fff;
-  padding-block: 10px;
-  padding-inline: 20px;
+  padding: 20px;
 }
 
-footer {
-  display: grid;
-  place-content: center;
+footer .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   font-size: 20px;
 }
 
 @media (max-width: 500px) {
   header {
-    flex-direction: column;
-    gap: 15px;
+    & .container {
+      flex-direction: column;
+      gap: 15px;
+    }
 
     & h1 {
       font-size: 18px;
@@ -171,6 +224,43 @@ footer {
   }
   footer {
     font-size: 15px;
+  }
+}
+
+/* login page */
+.instructions {
+  color: blueviolet;
+  line-height: 24px;
+  background: rgb(244, 231, 255);
+  padding: 10px;
+  border-radius: 4px;
+
+  &::before {
+    content: "!";
+    margin-right: 7px;
+    border: 2px solid currentColor;
+    display: inline-grid;
+    place-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: bold;
+  }
+}
+
+.login-page-users-list {
+  margin-top: 20px;
+  border: blueviolet 3px solid;
+  border-radius: 4px;
+  padding: 10px;
+
+  & h3 {
+    margin-block: auto;
+  }
+
+  & * + * {
+    margin-top: 10px;
   }
 }
 
@@ -188,32 +278,11 @@ footer {
 }
 
 .cats-tabs-holder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
   margin-top: 20px;
-}
 
-/* dashboard */
-form {
-  & input {
-    width: 100%;
-  }
-
-  & > * + * {
+  & ul.categories {
     margin-top: 10px;
-  }
-}
-
-.preview-holder {
-  margin-inline: auto;
-  margin-block: 15px;
-  height: 350px;
-  width: 100%;
-
-  & img {
-    margin: auto;
+    justify-content: center;
   }
 }
 
@@ -233,7 +302,7 @@ form {
   grid-template-columns: repeat(auto-fill, minmax(200px, 0.85fr));
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 20px 10px;
 }
 
 /* product card */
@@ -253,6 +322,18 @@ form {
 
   &:hover {
     background-color: rgb(226, 196, 253);
+  }
+}
+
+@media (max-width: 510px) {
+  .horizontal-list {
+    & .list-head {
+      display: none;
+    }
+
+    & li:not(.list-head) {
+      flex-direction: column;
+    }
   }
 }
 
@@ -278,8 +359,8 @@ form {
 
 .add-product-to-favorites {
   position: absolute;
-  top: -15px;
-  right: -10px;
+  top: -10px;
+  right: -5px;
 
   font-size: 17px;
 
@@ -416,9 +497,11 @@ form {
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
+  flex-wrap: wrap;
 
   & > * {
     align-self: stretch;
+    flex: 1;
 
     & a {
       height: 100%;

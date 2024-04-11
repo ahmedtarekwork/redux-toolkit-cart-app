@@ -7,6 +7,7 @@ import {
   Route,
   RouterProvider,
   createRoutesFromElements,
+  Navigate,
 } from "react-router-dom";
 
 // layouts \\
@@ -16,28 +17,30 @@ import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
 import SingleProduct from "./pages/SingleProduct";
 import ProductsListPage from "./pages/ProductsListPage";
-// import DashboardPage from "./pages/DashboardPage";
-import NotFoundPage from "./pages/NotFoundPage";
 import CategoriesPage from "./pages/CategoriesPage";
-import NoInternetPage from "./pages/NoInternetPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 
-// for redux
+// error pages
+import NotFoundPage from "./pages/error/NotFoundPage";
+import NoInternetPage from "./pages/error/NoInternetPage";
+
+// redux
 import { useSelector } from "react-redux";
 import { RootStateType } from "./app/store";
 import { useDispatch } from "./hooks/useDispatch";
 
-// action makers
-import { removeFavorites } from "./features/favoritesSlice";
-import { getCartItems, resetCart } from "./features/cartSlice";
-import { getProducts } from "./features/productListSlice";
-import { getCategories } from "./features/categoriesSlice";
-import { getUsers } from "./features/userSlice";
+// redux action and thunks
+import { removeFavorites } from "./app/features/favoritesSlice";
+import { resetCart, getCartItems } from "./app/features/cartSlice";
+import { getProducts } from "./app/features/productListSlice";
+import { getCategories } from "./app/features/categoriesSlice";
+import { getUsers } from "./app/features/userSlice";
 
 const App = () => {
   const dispatch = useDispatch();
 
+  // states
   const currentUser = useSelector(
     (state: RootStateType) => state.users.currentUser
   );
@@ -51,6 +54,11 @@ const App = () => {
     (state: RootStateType) => state.products
   );
 
+  // useEffects
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
+
   useEffect(() => {
     if (navigator.onLine && currentUser) {
       dispatch(getProducts());
@@ -59,14 +67,7 @@ const App = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    dispatch(getUsers());
-  }, []);
-
-  useEffect(() => {
     if (currentUser && productsList.length) {
-      console.log(currentUser);
-      console.log(productsList);
-
       dispatch(
         getCartItems({
           userId: currentUser.id,
@@ -81,7 +82,18 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
-        <Route index element={currentUser ? <HomePage /> : <LoginPage />} />
+        <Route
+          index
+          element={
+            currentUser ? (
+              <HomePage />
+            ) : (
+              <Navigate to="/login" relative="path" />
+            )
+          }
+        />
+
+        <Route path="/login" element={<LoginPage />} />
 
         <Route
           path="/cart"
@@ -98,7 +110,7 @@ const App = () => {
                 directionOfList="horizontal"
               />
             ) : (
-              <LoginPage />
+              <Navigate to="/login" relative="path" />
             )
           }
         />
@@ -119,34 +131,53 @@ const App = () => {
                 directionOfList="horizontal"
               />
             ) : (
-              <LoginPage />
+              <Navigate to="/login" relative="path" />
             )
           }
         />
 
-        {/* <Route
-          path="/dashboard"
-          element={currentUser ? <DashboardPage /> : <LoginPage />}
-        /> */}
-
         <Route
           path="/singleProduct/:id"
-          element={currentUser ? <SingleProduct /> : <LoginPage />}
+          element={
+            currentUser ? (
+              <SingleProduct />
+            ) : (
+              <Navigate to="/login" relative="path" />
+            )
+          }
         />
 
         <Route
           path="/categories/:category"
-          element={currentUser ? <CategoriesPage /> : <LoginPage />}
+          element={
+            currentUser ? (
+              <CategoriesPage />
+            ) : (
+              <Navigate to="/login" relative="path" />
+            )
+          }
         />
 
         <Route
           path="/profile"
-          element={currentUser ? <ProfilePage /> : <LoginPage />}
+          element={
+            currentUser ? (
+              <ProfilePage />
+            ) : (
+              <Navigate to="/login" relative="path" />
+            )
+          }
         />
 
         <Route
           path="*"
-          element={currentUser ? <NotFoundPage /> : <LoginPage />}
+          element={
+            currentUser ? (
+              <NotFoundPage />
+            ) : (
+              <Navigate to="/login" relative="path" />
+            )
+          }
         />
       </Route>
     )

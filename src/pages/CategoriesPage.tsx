@@ -1,15 +1,26 @@
+// react
+import { ReactNode, useEffect, useRef } from "react";
+
+// react-router-dom
+import { useParams, useLocation } from "react-router-dom";
+
+// redux
 import { useSelector } from "react-redux";
 import { useDispatch } from "../hooks/useDispatch";
-import { RootStateType } from "../app/store";
-import Loading from "../components/Loading";
-import { useParams, useLocation } from "react-router-dom";
+
+// redux thunks
 import {
   getCategories,
   getCategoryProducts,
-} from "../features/categoriesSlice";
-import { ReactNode, useEffect, useRef } from "react";
+} from "../app/features/categoriesSlice";
+
+// components
+import Loading from "../components/Loading";
 import ProductsList from "../components/ProductsList";
 import CategoriesTabs from "../components/CategoriesTabs";
+
+// types
+import { RootStateType } from "../app/store";
 
 const CategoriesPage = () => {
   const { category } = useParams();
@@ -28,17 +39,13 @@ const CategoriesPage = () => {
   const initRender = useRef(0);
 
   useEffect(() => {
-    console.log(categories);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    !categories.length && dispatch(getCategories() as any);
+    !categories.length && dispatch(getCategories());
   }, []);
 
   // get products from specific category
   useEffect(() => {
     if (initRender.current === 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      category && dispatch(getCategoryProducts(category) as any);
+      category && dispatch(getCategoryProducts(category));
     } else {
       dispatch(
         getCategoryProducts(location.pathname.split("/").slice(-1).toString())

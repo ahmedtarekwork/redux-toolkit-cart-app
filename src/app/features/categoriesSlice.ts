@@ -1,32 +1,40 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { productType } from "./productListSlice";
+import { productType } from "../../types";
+import axios from "axios";
+import baseUrl from "../../baseUrl";
+
+// error messages
+const catErrMsg = "can't get categories!";
+const catPrdErrMsg = (cat?: string) =>
+  `can't get products from ${cat || "some"} category`;
 
 export const getCategories = createAsyncThunk(
   "categories/getCategories",
+
   async () => {
     try {
-      return await (
-        await fetch("https://fakestoreapi.com/products/categories")
-      ).json();
-    } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return (error as any)?.message || "can't get categories";
+      const cats = (await axios.get(`${baseUrl}/products/categories`)).data;
+      if (!cats) throw Error();
+
+      return cats;
+    } catch (_) {
+      throw catErrMsg;
     }
   }
 );
 
 export const getCategoryProducts = createAsyncThunk(
   "categories/getCategoryProducts",
+
   async (cat: string) => {
     try {
-      return await (
-        await fetch(`https://fakestoreapi.com/products/category/${cat}`)
-      ).json();
-    } catch (error) {
-      return (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error as any)?.message || `can't get products from ${cat} category`
-      );
+      const products = (await axios.get(`${baseUrl}/products/category/${cat}`))
+        .data;
+      if (!products) throw Error();
+
+      return products;
+    } catch (_) {
+      throw catPrdErrMsg(cat);
     }
   }
 );
@@ -62,11 +70,14 @@ const categoriesSlice = createSlice({
       .addCase(getCategories.fulfilled, (state, action) => {
         state.loading = false;
         state.categories = action.payload;
+        state.error = "";
       })
       .addCase(getCategories.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message!;
+        state.error = action.error.message || catErrMsg;
+        state.categories = [];
       })
+
       // specific category products
       .addCase(getCategoryProducts.pending, (state) => {
         state.productsLoading = true;
@@ -74,10 +85,12 @@ const categoriesSlice = createSlice({
       .addCase(getCategoryProducts.fulfilled, (state, action) => {
         state.productsLoading = false;
         state.categoryProducts = action.payload;
+        state.productsError = "";
       })
-      .addCase(getCategoryProducts.rejected, (state, action) => {
+      .addCase(getCategoryProducts.rejected, (state, { error }) => {
         state.productsLoading = false;
-        state.productsError = action.error.message!;
+        state.productsError = error.message || catPrdErrMsg();
+        state.categoryProducts = [];
       });
   },
 });
